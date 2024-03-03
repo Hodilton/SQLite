@@ -5,7 +5,7 @@ from .products_table import ProductsTable
 from .price_history_table import PriceHistoryTable
 
 class Database:
-    def __init__(self, db_name="data1.db"):
+    def __init__(self, db_name="data/data1.db"):
         self.connection = sqlite3.connect(db_name)
         self.cursor = self.connection.cursor()
         self.products_table = ProductsTable(self.connection, self.cursor)
@@ -43,7 +43,7 @@ class Database:
 
     def view_tables(self):
         self.products_table.view_table('products', ['id', 'name', 'shop', 'current_price'])
-        self.price_history_table.view_table('price_history', ['id', 'product_id', 'shop', 'price', 'date_changed'])
+        #self.price_history_table.view_table('price_history', ['id', 'product_id', 'shop', 'price', 'date_changed'])
 
     def get_price_data(self, product_name, selected_shops, from_date, to_date):
         from_date_str = from_date.strftime("%Y-%m-%d")
