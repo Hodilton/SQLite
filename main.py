@@ -1,5 +1,4 @@
-from App import app_launcher
+from app.main_app import MainApp
 
 if __name__ == "__main__":
-    app = app_launcher.App()
-    app.run()
+    main_app = MainApp()
