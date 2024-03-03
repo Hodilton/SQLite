@@ -90,13 +90,24 @@ class PriceHistoryGUI:
 
         price_data = self.database_manager.get_price_data(selected_product, selected_shops, from_date, to_date)
 
-        # Clear previous plot
         self.ax.clear()
+
+        # # Plot price history
+        # for shop, records in price_data.items():
+        #     dates, prices = zip(*[(datetime.strptime(record[0], "%Y-%m-%d"), record[1]) for record in records])
+        #     self.ax.plot(dates, prices, label=shop)
 
         # Plot price history
         for shop, records in price_data.items():
-            dates, prices = zip(*[(datetime.strptime(record[0], "%Y-%m-%d"), record[1]) for record in records])
-            self.ax.plot(dates, prices, label=shop)
+            valid_records = [
+                (datetime.strptime(record[0], "%Y-%m-%d"), float(record[1]) if record[1] != 'N/A' else 0)
+                for record in records
+                if len(record) == 2
+            ]
+
+            if valid_records:
+                dates, prices = zip(*valid_records)
+                self.ax.plot(dates, prices, label=shop)
 
         # Format x-axis as dates
         date_format = DateFormatter("%Y-%m-%d")
@@ -124,7 +135,7 @@ class PriceHistoryGUI:
         #     current_prices_display.grid(row=0 + i, column=3, padx=10, pady=5, sticky=tk.W)
 
         for shop, price in current_prices.items():
-            self.ax.axhline(y=price, color='r', linestyle='--', label=f"{shop} Current Price - {price}")
+            self.ax.axhline(y=price, color='r', linestyle='-.', label=f"{shop} Current Price - {price}")
             self.ax.annotate(f"Current Price: {price}", xy=(0, price), xytext=(10, 0), textcoords='offset points',
                              color='r')
 
