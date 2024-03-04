@@ -48,7 +48,7 @@ class PriceHistoryGUI:
         self.to_date_entry = ttk.Entry(self.master)
         self.to_date_entry.insert(0, "YYYY-MM-DD")
 
-        self.plot_button = ttk.Button(self.master, text="Plot Graph", command=self.update_price_history)
+        self.plot_button = ttk.Button(self.master, text="Show", command=self.update_price_history)
 
         self.product_label.grid(row=0, column=0, padx=10, pady=5, sticky=tk.W)
         self.product_combobox.grid(row=1, column=0, padx=10, pady=5, sticky=tk.W)
@@ -97,7 +97,6 @@ class PriceHistoryGUI:
         #     dates, prices = zip(*[(datetime.strptime(record[0], "%Y-%m-%d"), record[1]) for record in records])
         #     self.ax.plot(dates, prices, label=shop)
 
-        # Plot price history
         for shop, records in price_data.items():
             valid_records = [
                 (datetime.strptime(record[0], "%Y-%m-%d"), float(record[1]) if record[1] != 'N/A' else 0)
@@ -109,12 +108,12 @@ class PriceHistoryGUI:
                 dates, prices = zip(*valid_records)
                 self.ax.plot(dates, prices, label=shop)
 
-        # Format x-axis as dates
+
         date_format = DateFormatter("%Y-%m-%d")
         self.ax.xaxis.set_major_formatter(date_format)
         self.fig.autofmt_xdate()
 
-        # Set labels and legend
+
         self.ax.set_xlabel("Date")
         self.ax.set_ylabel("Price")
         self.ax.legend()
